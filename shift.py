@@ -1,7 +1,5 @@
 import numpy as np
-from scipy.signal import get_window
-from scipy.stats import mode, pearsonr
-from scipy.optimize import least_squares
+from scipy.stats import mode
 from utils import frame_signal, rms
 
 def compute_lag(x, y, sr=44100, max_tau_sec=20):

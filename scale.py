@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.stats import mode, pearsonr
+from scipy.stats import pearsonr
 from scipy.optimize import least_squares
 from utils import frame_signal, rms
 

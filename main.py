@@ -7,7 +7,7 @@ import argparse
 from demucs.pretrained import get_model
 from demucs.apply import apply_model
 from shift import compute_lag, apply_lag, framewise_lag
-from scale import compute_scale_factor, residuals
+from scale import compute_scale_factor
 from utils import check_sample_rate
 
 
