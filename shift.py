@@ -2,7 +2,31 @@ import numpy as np
 from scipy.stats import mode
 from utils import frame_signal, rms
 
+
 def compute_lag(x, y, sr=44100, max_tau_sec=20):
+    """
+    Compute lag between two signals using 
+    Generalized Cross Correlation - Phase Transform (GCC-PHAT) method.
+    
+    Parameters
+    ----------
+    x : np.ndarray
+        Audio signal 1.
+                
+    y : np.ndarray
+        Audio signal 2.
+                
+    sr : int, optional (default 44100 Hz)
+         Sampling Rate.
+        
+    max_tau_sec : int (default 20 sec)
+                  Maximum tau in seconds.
+    
+    Return
+    ------
+    lag : int
+        Computed lag between x and y.
+    """
     # Ensure inputs are 1D numpy arrays
     x = np.asarray(x)
     y = np.asarray(y)
@@ -41,7 +65,31 @@ def compute_lag(x, y, sr=44100, max_tau_sec=20):
 
     return lag
 
+
 def apply_lag(x, y, lag):
+    """
+    Applying lag by padding to align two signals. 
+    
+    Parameters
+    ----------
+    x : np.ndarray
+        Audio signal 1.
+        
+    y : np.ndarray
+        Audio signal 2.
+        
+    lag : int
+          Computed lag between two signal from Compute_lag function.
+    
+    Returns
+    -------
+    x : np.ndarray
+        aligned signal 1 after applying lag.
+        
+    y : np.ndarray
+        aligned signal 2 after applying lag.
+    """
+    
     if lag > 0:
         y = np.pad(y, (lag, 0), mode='constant') 
     elif lag < 0:
@@ -56,7 +104,38 @@ def apply_lag(x, y, lag):
 
     return x, y
 
+
 def framewise_lag(y1, y2, sr=44100, frame_dur=1.0, hop_dur=0.5, rms_threshold=1e-6):
+    """
+    Compute lag between two signals by analizing frame-by-frame lag using cross correlation. 
+    
+    Parameters
+    ----------
+    y1 : np.ndarray
+        audio signal 1.
+        
+    y2 : np.ndarray
+        audio signal 2.
+        
+    sr : int, optional (default 44100 Hz)
+        Sampling rate.
+        
+    frame_dur : float, optional (default 1.0 sec)
+                Duration of each frame in seconds.
+        
+    hop_dur : float, optional (default 0.5 sec)
+                Step size (hop) between frames in seconds.
+        
+    rms_threshold : float, optional (default 1e-6)
+                    RMS threshold to avoid computing the lag in silent frames.
+        
+    Return
+    ------
+    int
+        Computed frame-by-frame lag between y1 and y2. 
+    
+    """
+    
     assert len(y1) == len(y2)
 
     frame_size = int(frame_dur * sr)
@@ -67,13 +146,14 @@ def framewise_lag(y1, y2, sr=44100, frame_dur=1.0, hop_dur=0.5, rms_threshold=1e
     
     lags = []
     
+    # Iterate through each frames
     for i in range(n_frames):
         f1 = y1_frames[i, :]
         f2 = y2_frames[i, :]
-    
+
+        # Avoid the frame that has no signal (silence)
         if rms(f1) > rms_threshold and rms(f2) > rms_threshold:
             frame_lag = compute_lag(f1, f2, sr, max_tau_sec=0.25)
             lags.append(frame_lag)
 
     return mode(lags, keepdims=True)[0][0]
-

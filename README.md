@@ -19,7 +19,9 @@ TBA
 ### Executing program
 
 ```
-python --live path/to/live/audio.wav --recorded path/to/recorded/audio.wav --output_dir path/to/output/directory
+python --live path/to/live/audio.wav \
+       --recorded path/to/recorded/audio.wav \
+       --output_dir path/to/output/directory
 ```
 
 
