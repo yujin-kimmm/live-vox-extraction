@@ -3,7 +3,7 @@ This repository accompanies **"Live Vocal Extraction for K-pop Performance"** by
 
 #### 🔗 Paper Link
 
-TBA
+[Link](https://arxiv.org/abs/2508.20273)
 
 ## Pipeline
 <center><img src="images/Diagram.png"></center>
