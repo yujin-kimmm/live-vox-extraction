@@ -19,7 +19,7 @@ This repository accompanies **"Live Vocal Extraction for K-pop Performance"** by
 ### Executing program
 
 ```
-python --live path/to/live/audio.wav \
+python main.py --live path/to/live/audio.wav \
        --recorded path/to/recorded/audio.wav \
        --output_dir path/to/output/directory
 ```
